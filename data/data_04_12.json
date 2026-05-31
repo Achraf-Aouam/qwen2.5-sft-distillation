@@ -1,0 +1,17 @@
+[
+  {
+    "instruction": "You are a data extraction assistant specialized in analyzing documents and extracting structured information.\n\nYou must:\n- Extract only explicitly stated information from the document\n- Look beyond the small OCR typos if needed like missing whitespaces, merged text or wrong character\n- you can make minute assumptions \n- Return null for missing or uncertain fields\n- Validate extracted data according to provided rules (if any)\n- Output valid JSON in minified format (no extra whitespace)\n- Be accurate and precise in your extractions",
+    "input": "Analyze the following document content and extract structured information.\n\n**Extract the following keys:**\n\"date\", \"recipient\", \"sender\", \"document_id\", \"total_ht\", \"total_tax\", \"total_ttc\"\n\n**Validation rules:**\n - date: Document date in DD/MM/YYYY format\n - recipient: The company/person receiving the document. Common: ACME RETAIL, EXAMPLE CO\n - sender: The company/person sending the document. Look for company names with suffixes like S.A., S.A.R.L.\n - document_id: Document reference number (N° Facture, N° BC, N° BL, Référence)\n - total_ht: Total amount before tax. Numeric value only\n - total_tax: Tax amount (TVA). Numeric value only\n - total_ttc: Total amount with tax. Should equal total_ht + total_tax\n\n### DOCUMENT\nFACTURE N° 01/25\nDate: 03/01/2025\nClient: ACME RETAIL\nFournisseur: EXAMPLE SARL\nMontant HT: 5944.05\nTVA 20%: 1188.81\nTotal TTC: 7132.86",
+    "output": "{\"date\":\"03/01/2025\",\"recipient\":\"ACME RETAIL\",\"sender\":\"EXAMPLE SARL\",\"document_id\":\"01/25\",\"total_ht\":5944.05,\"total_tax\":1188.81,\"total_ttc\":7132.86}"
+  },
+  {
+    "instruction": "You are a data extraction assistant specialized in analyzing documents and extracting structured information.\n\nYou must:\n- Extract only explicitly stated information from the document\n- Return null for missing or uncertain fields\n- Output valid JSON in minified format (no extra whitespace)",
+    "input": "Analyze the following document content and extract structured information.\n\n**Extract the following keys:**\n\"date\", \"recipient\", \"sender\", \"document_id\", \"total_ht\", \"total_tax\", \"total_ttc\"\n\n### DOCUMENT\nBon de Livraison BL-02/20\nDate: 10/08/2022\nDestinataire: SAMPLE EXPORT\nÉmetteur: GENERIC GARMENTS\nMontant HT: 35401.20",
+    "output": "{\"date\":\"10/08/2022\",\"recipient\":\"SAMPLE EXPORT\",\"sender\":\"GENERIC GARMENTS\",\"document_id\":\"02/20\",\"total_ht\":35401.2,\"total_tax\":null,\"total_ttc\":null}"
+  },
+  {
+    "instruction": "You are a data extraction assistant specialized in analyzing documents and extracting structured information.\n\nYou must:\n- Extract only explicitly stated information from the document\n- Return null for missing or uncertain fields\n- Output valid JSON in minified format (no extra whitespace)",
+    "input": "Analyze the following document content and extract structured information.\n\n**Extract the following keys:**\n\"date\", \"recipient\", \"sender\", \"document_id\", \"total_ht\", \"total_tax\", \"total_ttc\"\n\n### DOCUMENT\nFacture FAC-2024-117\nDate: 22/11/2024\nClient: ACME RETAIL\nFournisseur: DEMO SUPPLIES S.A.\nTotal HT: 12000.00\nTVA 10%: 1200.00\nTTC: 13200.00",
+    "output": "{\"date\":\"22/11/2024\",\"recipient\":\"ACME RETAIL\",\"sender\":\"DEMO SUPPLIES S.A.\",\"document_id\":\"FAC-2024-117\",\"total_ht\":12000.0,\"total_tax\":1200.0,\"total_ttc\":13200.0}"
+  }
+]

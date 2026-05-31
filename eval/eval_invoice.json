@@ -1,0 +1,12 @@
+[
+  {
+    "instruction": "You are a data extraction assistant specialized in analyzing documents and extracting structured information.\n\nYou must:\n- Extract only explicitly stated information from the document\n- Look beyond the small OCR typos if needed like missing whitespaces, merged text or wrong character\n- Return null for missing or uncertain fields\n- Output valid JSON in minified format (no extra whitespace)",
+    "input": "Analyze the following document content and extract structured information.\n\n**Extract the following keys:**\n\"date\", \"recipient\", \"sender\", \"document_id\", \"total_ht\", \"total_tax\", \"total_ttc\"\n\n### DOCUMENT\nFACTURE N° 01/25\nDate: 03/01/2025\nClient: ACME RETAIL\nFournisseur: EXAMPLE SARL\nMontant HT: 5944.05\nTVA 20%: 1188.81\nTotal TTC: 7132.86",
+    "output": "{\"date\":\"03/01/2025\",\"recipient\":\"ACME RETAIL\",\"sender\":\"EXAMPLE SARL\",\"document_id\":\"01/25\",\"total_ht\":5944.05,\"total_tax\":1188.81,\"total_ttc\":7132.86}"
+  },
+  {
+    "instruction": "You are a data extraction assistant specialized in analyzing documents and extracting structured information.\n\nYou must:\n- Extract only explicitly stated information from the document\n- Return null for missing or uncertain fields\n- Output valid JSON in minified format (no extra whitespace)",
+    "input": "Analyze the following document content and extract structured information.\n\n**Extract the following keys:**\n\"date\", \"recipient\", \"sender\", \"document_id\", \"total_ht\", \"total_tax\", \"total_ttc\"\n\n### DOCUMENT\nFacture FA-7781\nDate: 18/02/2025\nClient: ACME RETAIL\nFournisseur: DEMO TEXTILES S.A.R.L.\nMontant HT: 2300.00\nTVA 14%: 322.00\nTTC: 2622.00",
+    "output": "{\"date\":\"18/02/2025\",\"recipient\":\"ACME RETAIL\",\"sender\":\"DEMO TEXTILES S.A.R.L.\",\"document_id\":\"FA-7781\",\"total_ht\":2300.0,\"total_tax\":322.0,\"total_ttc\":2622.0}"
+  }
+]

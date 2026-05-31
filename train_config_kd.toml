@@ -1,0 +1,82 @@
+# --- Default KD config (alpha=0.4, T=1.0). ----------------------------------
+# Every knob lives here. Duplicate this file per experiment and pass
+# `--config my_variant.toml` — do NOT override these from the CLI. The
+# run name auto-gets a random 3-char suffix so repeat/parallel runs of the
+# same config can't collide in wandb.
+
+[paths]
+# KD training ignores paths.train_data (the parquet shards are the source of
+# truth); it is still resolved by the config loader, so leave it pointing at
+# something valid.
+train_data = "data/data_04_12.json"
+output_dir = "outputs_kd/default"
+local_log_dir = ""
+resume_from_checkpoint = "auto"
+
+[kd]
+# Produced by KL_div_prep/build_kd_dataset.py from the parquet shards.
+dataset_dir = "KL_div_prep/artifacts/qwen2.5-14b-top10-kd"
+alpha = 0.4             # weight on the teacher top-K soft loss (0 = plain SFT, 1 = pure KD)
+temperature = 1.0       # softmax temperature applied to both teacher and student
+
+[model]
+model_name = "unsloth/Qwen2.5-0.5B-Instruct"
+max_seq_length = 6048
+load_in_4bit = false
+
+[lora]
+rank = 128
+lora_alpha = 128
+lora_dropout = 0.0
+bias = "none"
+use_gradient_checkpointing = "unsloth"
+use_rslora = false
+target_modules = [
+  "q_proj",
+  "k_proj",
+  "v_proj",
+  "o_proj",
+  "gate_proj",
+  "up_proj",
+  "down_proj",
+]
+
+[training]
+# Full-logits forward materializes [B, T, V] for the KD soft loss; drop batch
+# size vs train_config.toml if you hit OOM. On a 96GB GPU with Qwen2.5-0.5B
+# (V~152k) and typical T<=2k, B=32 leaves plenty of headroom.
+per_device_train_batch_size = 32
+per_device_eval_batch_size = 8
+gradient_accumulation_steps = 2
+learning_rate = 1e-5
+weight_decay = 0.01
+warmup_steps = 5
+num_train_epochs = 2.0
+max_steps = -1
+logging_steps = 2
+save_steps = 25
+eval_steps = 25
+save_total_limit = -1
+dataset_num_proc = 1
+packing = false
+seed = 3407
+optim = "adamw_8bit"
+lr_scheduler_type = "linear"
+
+[eval]
+gen_batch_size = 8
+max_new_tokens = 512
+
+[eval.corpora]
+order = "eval/eval_order.json"
+vehicle = "eval/eval_vehicle.json"
+invoice = "eval/eval_invoice.json"
+
+[wandb]
+project = "hero_qwen3_kd"
+# Leave blank to auto-build the run name from model + alpha + T + bs + lr,
+# or set a stem here (a random 3-char suffix is always appended).
+run_name = ""
+
+[runtime]
+allow_tf32 = true

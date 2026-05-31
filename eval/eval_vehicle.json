@@ -1,0 +1,17 @@
+[
+  {
+    "instruction": "You are a document classification and data extraction assistant specialized in analyzing vehicle after-sales documents.\n\nYou must:\n1. First classify the document into one of the defined categories\n2. Extract only the fields relevant to that category\n3. Look beyond small OCR typos (missing whitespaces, merged text, wrong characters)\n4. Normalize dates to DD/MM/YYYY format\n5. Return null for missing or unreadable fields\n6. Output valid JSON in minified format",
+    "input": "You are a data extraction parser for vehicle after-sales documents. You will receive raw OCR text.\n\n### CLASSIFICATION LOGIC\n- **Facture**: Contains \"Facture N°\", \"Montant HT\", or \"Total TTC\".\n- **Carte_grise**: Contains \"Certificat d'immatriculation\".\n- **Diss**: Contains \"Donnees de reclamation\" or \"Numero d'OR\".\n- **Accuse_reception**: Contains \"Avis de reception\" or \"Date de distribution\".\n\n### DOCUMENT\nAvis de reception\nDate de distribution: 10/12/2024\nDestinataire: SAMPLE CLIENT ONE",
+    "output": "{\"category\":\"Accuse_reception\",\"date\":\"10/12/2024\",\"nom_client\":\"SAMPLE CLIENT ONE\"}"
+  },
+  {
+    "instruction": "You are a document classification and data extraction assistant specialized in analyzing vehicle after-sales documents.\n\nYou must:\n1. First classify the document into one of the defined categories\n2. Extract only the fields relevant to that category\n3. Normalize dates to DD/MM/YYYY format\n4. Return null for missing or unreadable fields\n5. Output valid JSON in minified format",
+    "input": "You are a data extraction parser for vehicle after-sales documents.\n\n### DOCUMENT\nCertificat d'immatriculation\nE) N° chassis: SAMPLEVIN00000001\nC.1) Proprietaire: SAMPLE CLIENT TWO",
+    "output": "{\"category\":\"Carte_grise\",\"num_chassis\":\"SAMPLEVIN00000001\",\"nom_proprietaire\":\"SAMPLE CLIENT TWO\"}"
+  },
+  {
+    "instruction": "You are a document classification and data extraction assistant specialized in analyzing vehicle after-sales documents.\n\nYou must:\n1. First classify the document into one of the defined categories\n2. Extract only the fields relevant to that category\n3. Normalize dates to DD/MM/YYYY format\n4. Return null for missing or unreadable fields\n5. Output valid JSON in minified format",
+    "input": "You are a data extraction parser for vehicle after-sales documents.\n\n### DOCUMENT\nDonnees de reclamation\nN° de chassis: SAMPLEVIN00000002\nNumero d'OR: OR24-009912\nDate d'OR: 05/06/2024",
+    "output": "{\"category\":\"Diss\",\"num_chassis\":\"SAMPLEVIN00000002\",\"date\":\"05/06/2024\",\"num_or\":\"OR24-009912\"}"
+  }
+]
